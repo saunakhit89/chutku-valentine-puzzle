@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chutku Valentine Puzzle 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    text-align: center;
+    padding: 15px;
+  }
+
+  h1 { color: #b30059; }
+
+  #puzzle {
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    border: 5px solid #fff;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .piece {
+    width: 100%;
+    height: 100%;
+    background-image: url('chutku.png');
+    background-size: 300px 300px;
+    cursor: pointer;
+  }
+
+  .card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+
+  .hint {
+    font-size: 14px;
+    color: #444;
+    margin-top: 10px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>💝 Chutku Valentine Puzzle 💝</h1>
+
+<div class="card">
+
+  <p>
+    👉 Roman Hindi Instructions:<br>
+    Phone ko zor se shake karo to puzzle mix ho jayega 📱<br>
+    Phir pieces ko tap karke swap karo aur image complete karo 💖
+  </p>
+
+  <div id="puzzle"></div>
+
+  <p class="hint">
+    Hint: Phone shake = Magic Shuffle ✨
+  </p>
+
+  <hr>
+
+  <p style="color:#b30059; font-weight:bold;">
+    💌 Cute Valentine Message:
+  </p>
+
+  <p>
+    Jaise is puzzle ko fix karna padta hai,<br>
+    waise hi main wada karta hoon Chutku,<br>
+    jab bhi life me kuch tootega ya ulta-pulta hoga,<br>
+    main hamesha tumhare saath khada rahunga use fix karne ke liye ❤️  
+  </p>
+
+  <p>
+    Happy Valentine Week meri sabse special dost 💖  
+    Miss you Chutku 🤗
+  </p>
+
+</div>
+
+<script>
+const puzzle = document.getElementById('puzzle');
+let pieces = [];
+let selected = null;
+
+// Create pieces
+for (let i = 0; i < 9; i++) {
+  const piece = document.createElement('div');
+  piece.className = 'piece';
+
+  const x = i % 3;
+  const y = Math.floor(i / 3);
+
+  piece.style.backgroundPosition = 
+    `-${x * 100}px -${y * 100}px`;
+
+  piece.dataset.index = i;
+
+  piece.addEventListener('click', () => selectPiece(piece));
+
+  puzzle.appendChild(piece);
+  pieces.push(piece);
+}
+
+// Swap logic
+function selectPiece(piece) {
+  if (!selected) {
+    selected = piece;
+    piece.style.opacity = '0.6';
+  } else {
+    swapPieces(selected, piece);
+    selected.style.opacity = '1';
+    selected = null;
+  }
+}
+
+function swapPieces(p1, p2) {
+  const temp = p1.style.backgroundPosition;
+  p1.style.backgroundPosition = p2.style.backgroundPosition;
+  p2.style.backgroundPosition = temp;
+}
+
+// Shuffle on shake
+let lastX, lastY, lastZ;
+window.addEventListener('devicemotion', function(e) {
+  let acc = e.accelerationIncludingGravity;
+  if (!acc) return;
+
+  if (lastX !== null) {
+    let diff = 
+      Math.abs(acc.x - lastX) +
+      Math.abs(acc.y - lastY) +
+      Math.abs(acc.z - lastZ);
+
+    if (diff > 25) {
+      shufflePuzzle();
+    }
+  }
+
+  lastX = acc.x;
+  lastY = acc.y;
+  lastZ = acc.z;
+});
+
+function shufflePuzzle() {
+  for (let i = pieces.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = pieces[i].style.backgroundPosition;
+    pieces[i].style.backgroundPosition = pieces[j].style.backgroundPosition;
+    pieces[j].style.backgroundPosition = temp;
+  }
+  alert("📱 Phone shake detect hua! Puzzle shuffle ho gaya 😄");
+}
+</script>
+
+</body>
+</html>
+
